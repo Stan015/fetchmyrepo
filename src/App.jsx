@@ -8,7 +8,6 @@ const App = () => {
   return (
     <>
       <Router>
-        <div>
           <Routes>
             <Route
               path="/"
@@ -36,7 +35,6 @@ const App = () => {
             />
             <Route path="*" element={<NotFound />} />
           </Routes>
-        </div>
       </Router>
     </>
   );
