@@ -8,6 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import RepositoryDetailsSkeleton from "./skeletons/RepositoryDetailsSkeleton";
 
 const RepositoryDetails = () => {
   const { repoName } = useParams();
@@ -21,7 +22,7 @@ const RepositoryDetails = () => {
           `https://api.github.com/repos/Stan015/${repoName}`,
           {
             headers: {
-              Authorization: "token xyz",
+              Authorization: `token ${import.meta.env.VITE_REACT_APP_GITHUB_TOKEN}`,
             },
           }
         );
@@ -45,7 +46,7 @@ const RepositoryDetails = () => {
   }, []);
 
   if (!repository) {
-    return <div>Loading...</div>;
+    return <RepositoryDetailsSkeleton />;
   }
 
   // console.log(repository)
@@ -54,7 +55,7 @@ const RepositoryDetails = () => {
       <section className="flex w-full pt-20 justify-center">
         <Card className="flex flex-col items-center max-md:w-4/5 max-lg:w-3/5 lg:w-3/6">
           <CardHeader>
-            <CardTitle className="text-3xl text-center mb-2 max-sm:text-2xl ">Project Name: {repository.name}</CardTitle>
+            <CardTitle className="text-3xl text-center mb-2 max-sm:text-2xl uppercase">Project Name: {repository.name}</CardTitle>
             <CardDescription className="text-center text-base">{repository.description}</CardDescription>
           </CardHeader>
           <CardContent className="grid w-full grid-cols-2 max-sm:grid-cols-1 items-center text-center gap-4">
@@ -68,8 +69,8 @@ const RepositoryDetails = () => {
             {repository.homepage && <Link className="leading-10 border-border border-2 rounded-sm p-1" to={repository.homepage} target="_blank" rel="noopener noreferrer">Visit Live Site</Link>}
             {repository.html_url && <Link className="leading-10 border-border border-2 rounded-sm p-1" to={repository.html_url} target="_blank" rel="noopener noreferrer">Visit Remote Repo</Link>}
             {/* {repository.license && <p className="leading-10 border-border border-2 rounded-sm">License: {repository.license.name}</p>} */}
-            <p className="leading-10 border-border border-2 rounded-sm p-1">Date Created: {repository.created_at}</p>
-            <p className="leading-10 border-border border-2 rounded-sm p-1">Last Updated: {repository.updated_at}</p>
+            <p className="leading-10 border-border border-2 rounded-sm p-1">Date Created: {new Date(repository.created_at).toLocaleDateString()}</p>
+            <p className="leading-10 border-border border-2 rounded-sm p-1">Last Updated: {new Date(repository.updated_at).toLocaleDateString()}</p>
           </CardContent>
 
           <CardFooter className="">
