@@ -18,18 +18,24 @@ import {
 } from "@/components/ui/card";
 import { Input } from "./ui/input";
 import UserGitHubProfile from "./UserGitHubProfile";
+import RepositoryListSkeleton from "./skeletons/RepositoryListSkeleton";
 
 const RepositoryList = () => {
   const [repositories, setRepositories] = useState([]);
-  const reposPerPage = 8;
+  const [reposPerPage] = useState(8);
   const [searchQuery, setSearchQuery] = useState("");
+  const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   // const [error, setError] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
 
   // get current page
-  const page = parseInt(new URLSearchParams(location.search).get("page")) || 1;
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const _page = parseInt(params.get("page")) || 1;
+    setPage(_page);
+  }, [location.search]);
   //
 
   // fetch repositories
@@ -37,7 +43,7 @@ const RepositoryList = () => {
     const fetchRepositories = async () => {
       try {
         const response = await fetch(
-          `https://api.github.com/users/Stan015/repos?per_page=${reposPerPage}&page=${page}`,
+          `https://api.github.com/users/Stan015/repos`,
           {
             headers: {
               Authorization: `token ${
@@ -52,14 +58,7 @@ const RepositoryList = () => {
         const data = await response.json();
         setRepositories(data);
 
-        // get total pages
-        const linkHeader = response.headers.get("Link");
-        if (linkHeader) {
-          const totalPagesMatch = linkHeader.match(/page=(\d+)>; rel="last"/);
-          if (totalPagesMatch) {
-            setTotalPages(parseInt(totalPagesMatch[1]));
-          }
-        }
+        setTotalPages(Math.ceil(data.length / reposPerPage));
       } catch (error) {
         // setError(error.message);
         console.error("Error fetching repositories:", error);
@@ -67,40 +66,58 @@ const RepositoryList = () => {
     };
 
     fetchRepositories();
-  }, [reposPerPage, page]);
-
-  const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value);
-  };
+  }, [reposPerPage]);
 
   // console.log(searchQuery);
-
   if (repositories.length === 0) {
-    return <div>Loading...</div>;
+    return <RepositoryListSkeleton />;
   }
+
+  // console.log(repositories);
+
+  const handlePrev = () => {
+    const prevPageNumber = Math.max(page - 1, 1);
+    navigate(`/repositories?page=${prevPageNumber}`);
+  };
+
+  const handleNext = () => {
+    const nextPage = Math.min(page + 1, totalPages);
+    navigate(`/repositories?page=${nextPage}`);
+  };
+
+  const getCurrentPageFromURL = () => {
+    const params = new URLSearchParams(location.search);
+    return parseInt(params.get("page")) || 1;
+  };
+
+  const currentPage = getCurrentPageFromURL();
+
+  const handleSearchChange = (e) => {
+    const searchValue = e.target.value;
+    setSearchQuery(searchValue);
+
+    if (searchValue === "") {
+      navigate(`/repositories?page=${currentPage}`);
+      setPage(currentPage);
+    } else {
+      setPage(1);
+    }
+  };
+
+  const startIndex = (page - 1) * reposPerPage;
+  const endIndex = page * reposPerPage;
 
   const filteredRepositories = repositories.filter((repo) =>
     repo.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  console.log(repositories);
-
-  const handlePrev = () => {
-    const prevPage = page - 1;
-    if (prevPage >= 1) {
-      navigate(`/repositories?page=${prevPage}`);
-    }
-  };
-
-  const handleNext = () => {
-    const nextPage = page + 1;
-    if (nextPage <= totalPages) {
-      navigate(`/repositories?page=${nextPage}`);
-    }
-  };
+  const displayedRepositories = filteredRepositories.slice(
+    startIndex,
+    endIndex
+  );
 
   return (
-    <div className="flex flex-col w-full items-center h-full gap-6 pt-10">
+    <div className="flex flex-col w-full items-center min-h-full gap-6 pt-10">
       <UserGitHubProfile />
       <div className="flex gap-2 w-full items-center max-md:w-4/5 max-lg:w-3/5 lg:w-3/6">
         <Input
@@ -124,7 +141,7 @@ const RepositoryList = () => {
         </CardHeader>
         <CardContent className="h-full w-full">
           <ul className="flex flex-col w-full items-center text-center gap-4 h-full">
-            {filteredRepositories.map((repo) => (
+            {displayedRepositories.map((repo) => (
               <li
                 key={repo.id}
                 className="leading-10 border-border border-2 rounded-sm p-1 w-full text-lg transition-all hover:bg-violet-700"
@@ -169,6 +186,12 @@ const RepositoryList = () => {
           </Pagination>
         </CardFooter>
       </Card>
+      <footer className="flex w-full h-[7rem] items-center justify-around gap-4 mt-4 border-t-[1px] border-t-slate-800 p-2">
+        <p className="text-center max-sm:w-1/2 max-sm:text-sm">{`"Everyone's got a blank page and a pen 🖊️"`}</p>
+        <span className="text-center max-sm:w-1/2 max-sm:text-sm">
+          &copy;{` Stanley Azi ${new Date().getFullYear()}`}
+        </span>
+      </footer>
     </div>
   );
 };

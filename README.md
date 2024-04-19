@@ -13,3 +13,28 @@ Implement a Web App using GitHub API to fetch your GitHub repositories portfolio
 5. Good Layout, UI, and Designs are essential. Accessibility techniques taught in semester one are Important.
 
 BONUS: Provide a button to Create a new repo using a Modal, allow a way to update some details of the created repo, and finally add a way to delete the repo.
+
+### My Approach for building this app
+
+The project was started with Vite and all dependencies were installed with pnpm.
+
+#### Technologies
+
+- React
+- Tailwindcss
+- Shadcn UI
+
+#### App features
+
+- Ability to list all public github repositories
+- Pagination was implemented
+- Ability to click and view project/repository details
+- Ability to nativigate back to the exact previous page after exploring repository details
+- User card for that displays the user name, avatar, bio, etc.
+- Ability to search by repository name accross all public repositories
+- Good looking UI
+- Accessibility techniques applied
+- 404 page was implemented in cases of not-found page
+- Error Boundary implemented
+- Skeleton was implemented for all UIs
+- head/meta data was implemented with react-helmet-async describing each page
