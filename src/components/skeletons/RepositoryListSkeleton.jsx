@@ -1,10 +1,8 @@
 import { Skeleton } from "../ui/skeleton";
-import UserGitHubProfileSkeleton from "./UserGitHubProfileSkeleton";
 
 function RepositoryListSkeleton() {
   return (
     <div className="flex flex-col w-full items-center h-full gap-6 pt-10">
-      <UserGitHubProfileSkeleton />
       <div className="flex gap-2 w-full items-center max-md:w-4/5 max-lg:w-3/5 lg:w-3/6 ">
       <Skeleton className="h-10 border-border border-2 rounded-sm p-1 w-full" />
       </div>

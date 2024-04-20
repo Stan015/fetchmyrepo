@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import {
   Card,
   CardContent,
@@ -10,11 +10,12 @@ import {
 } from "@/components/ui/card";
 import RepositoryDetailsSkeleton from "./skeletons/RepositoryDetailsSkeleton";
 import { Helmet } from "react-helmet-async";
+import { Button } from "./ui/button";
 
 const RepositoryDetails = () => {
   const { repoName } = useParams();
   const [repository, setRepository] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchClickedRepo = async () => {
@@ -40,11 +41,9 @@ const RepositoryDetails = () => {
     fetchClickedRepo();
   }, [repoName]);
 
-  useEffect(() => {
-    const queryParams = new URLSearchParams(window.location.search);
-    const page = queryParams.get("page");
-    setCurrentPage(page);
-  }, []);
+  const handleBackToPreviousPage = () => {
+    navigate(-1);
+  };
 
   if (!repository) {
     return <RepositoryDetailsSkeleton />;
@@ -80,9 +79,9 @@ const RepositoryDetails = () => {
           </CardContent>
 
           <CardFooter className="">
-            <Link className="bg-violet-600 p-2 rounded-md hover:bg-violet-700 transition-all" to={`/repositories?page=${currentPage}`}>
+            <Button className="bg-violet-600 p-2 rounded-md hover:bg-violet-700 transition-all" onClick={handleBackToPreviousPage}>
               Back to Repository List
-            </Link>
+            </Button>
           </CardFooter>
         </Card>
       </section>

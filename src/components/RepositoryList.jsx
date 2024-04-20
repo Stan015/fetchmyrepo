@@ -17,16 +17,18 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "./ui/input";
-import UserGitHubProfile from "./UserGitHubProfile";
 import RepositoryListSkeleton from "./skeletons/RepositoryListSkeleton";
+// import { Button } from "./ui/button";
 
 const RepositoryList = () => {
   const [repositories, setRepositories] = useState([]);
   const [reposPerPage] = useState(8);
   const [searchQuery, setSearchQuery] = useState("");
+  // const [noRepoName, setNoRepoName] = useState(false)
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  // const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -41,6 +43,9 @@ const RepositoryList = () => {
   // fetch repositories
   useEffect(() => {
     const fetchRepositories = async () => {
+      setLoading(true);
+      setError(null);
+
       try {
         const response = await fetch(
           `https://api.github.com/users/Stan015/repos`,
@@ -60,17 +65,22 @@ const RepositoryList = () => {
 
         setTotalPages(Math.ceil(data.length / reposPerPage));
       } catch (error) {
-        // setError(error.message);
-        console.error("Error fetching repositories:", error);
+        setError(error.message);
+        // console.error("Error fetching repositories:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchRepositories();
   }, [reposPerPage]);
 
-  // console.log(searchQuery);
-  if (repositories.length === 0) {
+  if (loading) {
     return <RepositoryListSkeleton />;
+  }
+
+  if (error) {
+    throw new Error(error)
   }
 
   // console.log(repositories);
@@ -118,7 +128,6 @@ const RepositoryList = () => {
 
   return (
     <div className="flex flex-col w-full items-center min-h-full gap-6 pt-10">
-      <UserGitHubProfile />
       <div className="flex gap-2 w-full items-center max-md:w-4/5 max-lg:w-3/5 lg:w-3/6">
         <Input
           type="search"
@@ -126,7 +135,9 @@ const RepositoryList = () => {
           value={searchQuery}
           onChange={handleSearchChange}
         />
-        {/* <Button type="submit">Search</Button> */}
+        {/* <Button>
+          <Link className="w-full h-full" to={'/repositories/new'}>Create New Repo</Link>
+        </Button> */}
       </div>
       <Card className="flex flex-col items-center max-md:w-4/5 max-lg:w-3/5 lg:w-3/6">
         <CardHeader className="mb-4">
@@ -140,6 +151,7 @@ const RepositoryList = () => {
           </CardDescription>
         </CardHeader>
         <CardContent className="h-full w-full">
+          {/* {noRepoName && <p>No Repository with this name.</p>} */}
           <ul className="flex flex-col w-full items-center text-center gap-4 h-full">
             {displayedRepositories.map((repo) => (
               <li
