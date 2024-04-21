@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import {
   Card,
   CardContent,
@@ -11,13 +11,19 @@ import {
 import RepositoryDetailsSkeleton from "./skeletons/RepositoryDetailsSkeleton";
 import { Helmet } from "react-helmet-async";
 import { Button } from "./ui/button";
+import { useNavigate } from "react-router-dom";
 
 const RepositoryDetails = () => {
   const { repoName } = useParams();
   const [repository, setRepository] = useState(null);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
+    setLoading(true);
+    setError(null);
+
     const fetchClickedRepo = async () => {
       try {
         const response = await fetch(
@@ -34,7 +40,10 @@ const RepositoryDetails = () => {
         const data = await response.json();
         setRepository(data);
       } catch (error) {
+        setError(error.message);
         console.error("Error fetching repository details:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -45,10 +54,12 @@ const RepositoryDetails = () => {
     navigate(-1);
   };
 
-  if (!repository) {
+  if (loading) {
     return <RepositoryDetailsSkeleton />;
   }
-
+  if (error) {
+    throw new Error(error)
+  }
   // console.log(repository)
 
   return (

@@ -5,11 +5,10 @@ import { useNavigate } from "react-router-dom";
 const NotFound = () => {
   const navigate = useNavigate();
 
-
   const handleBackToPreviousPage = () => {
     navigate(-1);
   };
-  
+
   return (
     <div className="flex flex-col w-full h-full items-center justify-center">
       <Helmet>
@@ -24,9 +23,7 @@ const NotFound = () => {
         alt="404-Page not found"
       />
       <h1 className="text-2xl leading-10 font-bold mb-4">PAGE NOT FOUND</h1>
-      <Button onClick={handleBackToPreviousPage}>
-          Go Back
-        </Button>
+      <Button onClick={handleBackToPreviousPage}>Go Back</Button>
     </div>
   );
 };

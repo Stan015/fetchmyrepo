@@ -34,8 +34,16 @@ The project was started with Vite and all dependencies were installed with pnpm.
 - Ability to search by repository name accross all public repositories
 - Good looking UI
 - Accessibility techniques applied
-- 404 page was implemented in cases of not-found page
-- Error Boundary implemented
+- 404 page was implemented in cases of not-found page (there is a button in footer to test 404 page)
+- Error Boundary implemented (there is a button in footer to test error boundary)
 - Skeleton was implemented for all UIs
 - head/meta data was implemented with react-helmet-async describing each page
-- Ability to create new repository.(Although I commented this out as this is currently public and I wouldn't want random creation of repositories by people testing the app yet.)
+- Ability to create new repository, validate inputs and display a message if name already exists.(Although I commented this out as this is currently public and I wouldn't want random creation of repositories by people testing the app yet.)
+- Routes implemented (ability to correctly show page number and project name in url) and more.
+
+#### Some screenshots
+
+[screenshot showing user profile card, search bar, create repo btn repo list, etc](./src/assets/images/create-btn.png)
+[create repo page](./src//assets/images/create-repo-route.png)
+[repo details](./src/assets/images/project-details-page.png)
+[skeleton](./src/assets/images/skeleton.png)

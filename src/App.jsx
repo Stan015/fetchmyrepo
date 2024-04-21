@@ -17,8 +17,6 @@ const App = () => {
               <>
                 <ErrorBoundary>
                   <UserGitHubProfile />
-                </ErrorBoundary>
-                <ErrorBoundary>
                   <RepositoryList />
                 </ErrorBoundary>
               </>
@@ -30,8 +28,6 @@ const App = () => {
               <>
                 <ErrorBoundary>
                   <UserGitHubProfile />
-                </ErrorBoundary>
-                <ErrorBoundary>
                   <RepositoryList />
                 </ErrorBoundary>
               </>

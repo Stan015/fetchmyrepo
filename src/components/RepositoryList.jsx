@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate, useLocation} from "react-router-dom";
 import {
   Pagination,
   PaginationContent,
@@ -39,6 +39,27 @@ const RepositoryList = () => {
     setPage(_page);
   }, [location.search]);
   //
+
+  // to do: would come back to this...trying to make my 404 more strict
+  // useEffect(() => {
+  //   const params = new URLSearchParams(location.search);
+  //   const _page = parseInt(params.get("page")) || 1;
+
+  //   if (isNaN(_page) || _page < 1 || _page > totalPages) {
+  //     navigate("/notfound");
+
+  //     console.log(_page)
+  //   } else {
+  //     navigate(`/repositories?page=${_page}`);
+  //     setPage(_page);
+  //   }
+
+  //   // if (!isNaN(_page) && _page >= 1 && _page <= totalPages) {
+  //   //   navigate(`/repositories?page=${_page}`);
+  //   //   setPage(_page);
+  //   // }
+  // }, [location.search, totalPages, navigate]);
+  // //
 
   // fetch repositories
   useEffect(() => {
@@ -80,20 +101,35 @@ const RepositoryList = () => {
   }
 
   if (error) {
-    throw new Error(error)
+    throw new Error(error);
   }
+
+  // testing error Boundary
+  const testErrorBoundary = () => {
+    const error = new Error("Testing error Boundary");
+    setError(error);
+  };
 
   // console.log(repositories);
 
   const handlePrev = () => {
     const prevPageNumber = Math.max(page - 1, 1);
-    navigate(`/repositories?page=${prevPageNumber}`);
+    if (isNaN(prevPageNumber) || prevPageNumber < 1 || prevPageNumber > totalPages) {
+      navigate("/notfound");
+    } else {
+      navigate(`/repositories?page=${prevPageNumber}`);
+    }
   };
-
+  
   const handleNext = () => {
     const nextPage = Math.min(page + 1, totalPages);
-    navigate(`/repositories?page=${nextPage}`);
+    if (isNaN(nextPage) || nextPage < 1 || nextPage > totalPages) {
+      navigate("/notfound");
+    } else {
+      navigate(`/repositories?page=${nextPage}`);
+    }
   };
+  
 
   const getCurrentPageFromURL = () => {
     const params = new URLSearchParams(location.search);
@@ -135,8 +171,8 @@ const RepositoryList = () => {
           value={searchQuery}
           onChange={handleSearchChange}
         />
-        {/* <Button>
-          <Link className="w-full h-full" to={'/repositories/new'}>Create New Repo</Link>
+        {/* <Button className="p-0">
+          <Link className="w-full h-full p-2 text-center" to={'/repositories/new'}>Create New Repo</Link>
         </Button> */}
       </div>
       <Card className="flex flex-col items-center max-md:w-4/5 max-lg:w-3/5 lg:w-3/6">
@@ -198,11 +234,27 @@ const RepositoryList = () => {
           </Pagination>
         </CardFooter>
       </Card>
-      <footer className="flex w-full h-[7rem] items-center justify-around gap-4 mt-4 border-t-[1px] border-t-slate-800 p-2">
-        <p className="text-center max-sm:w-1/2 max-sm:text-sm">{`"Everyone's got a blank page and a pen 🖊️"`}</p>
-        <span className="text-center max-sm:w-1/2 max-sm:text-sm">
-          &copy;{` Stanley Azi ${new Date().getFullYear()}`}
-        </span>
+      <footer className="flex flex-col w-full h-[11rem] items-center justify-center gap-6 mt-4 border-t-[1px] border-t-slate-800 p-2">
+        <div className="flex w-full gap-6 text-[0.7rem] justify-center">
+          <Link
+            className="bg-violet-600 p-2 text-center hover:bg-violet-700 transition-all cursor-pointer rounded-sm w-[8rem]"
+            onClick={testErrorBoundary}
+          >
+            Test Error Boundary
+          </Link>
+          <Link
+            className="bg-violet-600 p-2 text-center hover:bg-violet-700 transition-all cursor-pointer rounded-sm w-[8rem]"
+            to={"/notfound"}
+          >
+            Test 404 page
+          </Link>
+        </div>
+        <div className="flex w-full justify-around">
+          <p className="text-center max-sm:w-1/2 max-sm:text-sm">{`"Everyone's got a blank page and a pen 🖊️"`}</p>
+          <span className="text-center max-sm:w-1/2 max-sm:text-sm">
+            &copy;{` Stanley Azi ${new Date().getFullYear()}`}
+          </span>
+        </div>
       </footer>
     </div>
   );
