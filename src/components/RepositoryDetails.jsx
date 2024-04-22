@@ -28,11 +28,11 @@ const RepositoryDetails = () => {
       try {
         const response = await fetch(
           `https://api.github.com/repos/Stan015/${repoName}`,
-          {
-            headers: {
-              Authorization: `token ${import.meta.env.VITE_REACT_APP_GITHUB_TOKEN}`,
-            },
-          }
+          // {
+          //   headers: {
+          //     Authorization: `token ${import.meta.env.VITE_REACT_APP_GITHUB_TOKEN}`,
+          //   },
+          // }
         );
         if (!response.ok) {
           throw new Error("Failed to fetch repository details");

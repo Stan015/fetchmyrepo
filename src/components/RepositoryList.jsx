@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useErrorBoundary } from "react-error-boundary";
-import { Link, useNavigate, useLocation} from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import {
   Pagination,
   PaginationContent,
@@ -22,12 +22,12 @@ import RepositoryListSkeleton from "./skeletons/RepositoryListSkeleton";
 // import { Button } from "./ui/button";
 
 const RepositoryList = () => {
-  const {showBoundary} = useErrorBoundary();
+  const { showBoundary } = useErrorBoundary();
   const [repositories, setRepositories] = useState([]);
   const [filteredRepositories, setFilteredRepositories] = useState([]);
   const [reposPerPage] = useState(8);
   const [searchQuery, setSearchQuery] = useState("");
-  const [languageFilter, setLanguageFilter] = useState('');
+  const [languageFilter, setLanguageFilter] = useState("");
   // const [noRepoName, setNoRepoName] = useState(false)
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -50,14 +50,14 @@ const RepositoryList = () => {
 
       try {
         const response = await fetch(
-          `https://api.github.com/users/Stan015/repos`,
-          {
-            headers: {
-              Authorization: `token ${
-                import.meta.env.VITE_REACT_APP_GITHUB_TOKEN
-              }`,
-            },
-          }
+          `https://api.github.com/users/Stan015/repos`
+          // {
+          //   headers: {
+          //     Authorization: `token ${
+          //       import.meta.env.VITE_REACT_APP_GITHUB_TOKEN
+          //     }`,
+          //   },
+          // }
         );
         if (!response.ok) {
           throw new Error("Failed to fetch repositories");
@@ -67,7 +67,7 @@ const RepositoryList = () => {
 
         setTotalPages(Math.ceil(data.length / reposPerPage));
       } catch (error) {
-        showBoundary(error.message)
+        showBoundary(error.message);
         // console.error("Error fetching repositories:", error);
       } finally {
         setLoading(false);
@@ -80,21 +80,25 @@ const RepositoryList = () => {
   // update search and filter
   useEffect(() => {
     const filteredRepos = repositories.filter((repo) => {
-      const nameMatch = repo.name.toLowerCase().includes(searchQuery.toLowerCase());
-  
-      return  nameMatch;
+      const nameMatch = repo.name
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
+
+      return nameMatch;
     });
-  
+
     setFilteredRepositories(filteredRepos);
   }, [repositories, searchQuery]);
 
   useEffect(() => {
     const filteredRepos = repositories.filter((repo) => {
-      const languageMatch = repo.language && repo.language.toLowerCase().includes(languageFilter.toLowerCase()) 
-  
-      return  languageMatch;
+      const languageMatch =
+        repo.language &&
+        repo.language.toLowerCase().includes(languageFilter.toLowerCase());
+
+      return languageMatch;
     });
-  
+
     setFilteredRepositories(filteredRepos);
   }, [repositories, languageFilter]);
 
@@ -114,13 +118,17 @@ const RepositoryList = () => {
 
   const handlePrev = () => {
     const prevPageNumber = Math.max(page - 1, 1);
-    if (isNaN(prevPageNumber) || prevPageNumber < 1 || prevPageNumber > totalPages) {
+    if (
+      isNaN(prevPageNumber) ||
+      prevPageNumber < 1 ||
+      prevPageNumber > totalPages
+    ) {
       navigate("/notfound");
     } else {
       navigate(`/repositories?page=${prevPageNumber}`);
     }
   };
-  
+
   const handleNext = () => {
     const nextPage = Math.min(page + 1, totalPages);
     if (isNaN(nextPage) || nextPage < 1 || nextPage > totalPages) {
@@ -129,7 +137,6 @@ const RepositoryList = () => {
       navigate(`/repositories?page=${nextPage}`);
     }
   };
-  
 
   const getCurrentPageFromURL = () => {
     const params = new URLSearchParams(location.search);
@@ -183,12 +190,16 @@ const RepositoryList = () => {
           value={searchQuery}
           onChange={handleSearchChange}
         />
-        <select className="w-[5rem] h-[2.35rem] outline-none border-[1px] transition-all border-violet-700 px-1 text-sm rounded-sm bg-violet-700 hover:bg-violet-800 text-cent text-gray-200" value={languageFilter} onChange={handleLanguageFilter}>
-              <option value="">Filter</option>
-              <option value="Javascript">Javascript</option>
-              <option value="Typescript">Typescript</option>
-              <option value="CSS">CSS</option>
-              <option value="HTML">HTML</option>
+        <select
+          className="w-[5rem] h-[2.35rem] outline-none border-[1px] transition-all border-violet-700 px-1 text-sm rounded-sm bg-violet-700 hover:bg-violet-800 text-cent text-gray-200"
+          value={languageFilter}
+          onChange={handleLanguageFilter}
+        >
+          <option value="">Filter</option>
+          <option value="Javascript">Javascript</option>
+          <option value="Typescript">Typescript</option>
+          <option value="CSS">CSS</option>
+          <option value="HTML">HTML</option>
         </select>
         {/* <Button className="p-0">
           <Link className="w-full h-full p-2 text-center text-gray-200" to={'/repositories/new'}>&#x2b; New Repo</Link>
@@ -218,7 +229,11 @@ const RepositoryList = () => {
                   to={`/repositories/${repo.name}?page=${page}`}
                 >
                   {repo.name}
-                  {repo.description && <p className="text-sm w-3/4 max-sm:w-full text-gray-400 pb-2 text-balance pointer-events-none">{repo.description}</p>}
+                  {repo.description && (
+                    <p className="text-sm w-3/4 max-sm:w-full text-gray-400 pb-2 text-balance pointer-events-none">
+                      {repo.description}
+                    </p>
+                  )}
                 </Link>
               </li>
             ))}

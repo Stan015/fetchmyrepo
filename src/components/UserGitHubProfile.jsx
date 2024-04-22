@@ -17,7 +17,7 @@ import UserGitHubProfileSkeleton from "./skeletons/UserGitHubProfileSkeleton";
 import { Helmet } from "react-helmet-async";
 
 const UserGitHubProfile = () => {
-  const {showBoundary} = useErrorBoundary();
+  const { showBoundary } = useErrorBoundary();
   const [userProfile, setUserProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -26,13 +26,15 @@ const UserGitHubProfile = () => {
       setLoading(true);
 
       try {
-        const response = await fetch(`https://api.github.com/users/Stan015`, {
-          headers: {
-            Authorization: `token ${
-              import.meta.env.VITE_REACT_APP_GITHUB_TOKEN
-            }`,
-          },
-        });
+        const response = await fetch(`https://api.github.com/users/Stan015`, 
+        // {
+        //   headers: {
+        //     Authorization: `token ${
+        //       import.meta.env.VITE_REACT_APP_GITHUB_TOKEN
+        //     }`,
+        //   },
+        // }
+        );
         if (!response.ok) {
           throw new Error("Failed to fetch user profile");
         }
