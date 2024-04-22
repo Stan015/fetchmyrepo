@@ -79,7 +79,6 @@ const RepositoryDetails = () => {
             <p className="leading-10 border-border border-2 rounded-sm p-1">Forks: {repository.forks_count}</p>
             <p className="leading-10 border-border border-2 rounded-sm p-1">Open Issues: {repository.open_issues_count}</p>
             {repository.license && <p className="leading-10 border-border border-2 rounded-sm">License: {repository.license.name}</p>}
-            <p className="leading-10 border-border border-2 rounded-sm p-1">Open Issues: {repository.open_issues_count}</p>
             {repository.homepage && <Link className="leading-10 border-border border-2 rounded-sm p-1 transition-all hover:bg-violet-600" to={repository.homepage} target="_blank" rel="noopener noreferrer">Visit Live Site</Link>}
             {repository.html_url && <Link className="leading-10 border-border border-2 rounded-sm p-1 transition-all hover:bg-violet-600" to={repository.html_url} target="_blank" rel="noopener noreferrer">Visit Remote Repo</Link>}
             {/* {repository.license && <p className="leading-10 border-border border-2 rounded-sm">License: {repository.license.name}</p>} */}
