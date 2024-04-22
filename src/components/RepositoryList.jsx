@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useErrorBoundary } from "react-error-boundary";
 import { Link, useNavigate, useLocation} from "react-router-dom";
 import {
   Pagination,
@@ -21,14 +22,16 @@ import RepositoryListSkeleton from "./skeletons/RepositoryListSkeleton";
 // import { Button } from "./ui/button";
 
 const RepositoryList = () => {
+  const {showBoundary} = useErrorBoundary();
   const [repositories, setRepositories] = useState([]);
+  const [filteredRepositories, setFilteredRepositories] = useState([]);
   const [reposPerPage] = useState(8);
   const [searchQuery, setSearchQuery] = useState("");
+  const [languageFilter, setLanguageFilter] = useState('');
   // const [noRepoName, setNoRepoName] = useState(false)
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -40,32 +43,10 @@ const RepositoryList = () => {
   }, [location.search]);
   //
 
-  // to do: would come back to this...trying to make my 404 more strict
-  // useEffect(() => {
-  //   const params = new URLSearchParams(location.search);
-  //   const _page = parseInt(params.get("page")) || 1;
-
-  //   if (isNaN(_page) || _page < 1 || _page > totalPages) {
-  //     navigate("/notfound");
-
-  //     console.log(_page)
-  //   } else {
-  //     navigate(`/repositories?page=${_page}`);
-  //     setPage(_page);
-  //   }
-
-  //   // if (!isNaN(_page) && _page >= 1 && _page <= totalPages) {
-  //   //   navigate(`/repositories?page=${_page}`);
-  //   //   setPage(_page);
-  //   // }
-  // }, [location.search, totalPages, navigate]);
-  // //
-
   // fetch repositories
   useEffect(() => {
     const fetchRepositories = async () => {
       setLoading(true);
-      setError(null);
 
       try {
         const response = await fetch(
@@ -86,7 +67,7 @@ const RepositoryList = () => {
 
         setTotalPages(Math.ceil(data.length / reposPerPage));
       } catch (error) {
-        setError(error.message);
+        showBoundary(error.message)
         // console.error("Error fetching repositories:", error);
       } finally {
         setLoading(false);
@@ -94,20 +75,39 @@ const RepositoryList = () => {
     };
 
     fetchRepositories();
-  }, [reposPerPage]);
+  }, [reposPerPage, showBoundary]);
+
+  // update search and filter
+  useEffect(() => {
+    const filteredRepos = repositories.filter((repo) => {
+      const nameMatch = repo.name.toLowerCase().includes(searchQuery.toLowerCase());
+  
+      return  nameMatch;
+    });
+  
+    setFilteredRepositories(filteredRepos);
+  }, [repositories, searchQuery]);
+
+  useEffect(() => {
+    const filteredRepos = repositories.filter((repo) => {
+      const languageMatch = repo.language && repo.language.toLowerCase().includes(languageFilter.toLowerCase()) 
+  
+      return  languageMatch;
+    });
+  
+    setFilteredRepositories(filteredRepos);
+  }, [repositories, languageFilter]);
+
+  //
 
   if (loading) {
     return <RepositoryListSkeleton />;
   }
 
-  if (error) {
-    throw new Error(error);
-  }
-
   // testing error Boundary
   const testErrorBoundary = () => {
     const error = new Error("Testing error Boundary");
-    setError(error);
+    showBoundary(error);
   };
 
   // console.log(repositories);
@@ -138,6 +138,7 @@ const RepositoryList = () => {
 
   const currentPage = getCurrentPageFromURL();
 
+  // handle search
   const handleSearchChange = (e) => {
     const searchValue = e.target.value;
     setSearchQuery(searchValue);
@@ -150,12 +151,23 @@ const RepositoryList = () => {
     }
   };
 
+  // handle filter
+  const handleLanguageFilter = (e) => {
+    const filterValue = e.target.value;
+    // console.log(filterValue)
+    setLanguageFilter(filterValue);
+
+    if (filterValue === "") {
+      navigate(`/repositories?page=${currentPage}`);
+      setPage(currentPage);
+    } else {
+      setPage(1);
+    }
+  };
+
+  // pagination
   const startIndex = (page - 1) * reposPerPage;
   const endIndex = page * reposPerPage;
-
-  const filteredRepositories = repositories.filter((repo) =>
-    repo.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
 
   const displayedRepositories = filteredRepositories.slice(
     startIndex,
@@ -171,8 +183,15 @@ const RepositoryList = () => {
           value={searchQuery}
           onChange={handleSearchChange}
         />
+        <select className="w-[5rem] h-[2.35rem] outline-none border-[1px] transition-all border-violet-700 px-1 text-sm rounded-sm bg-violet-700 hover:bg-violet-800 text-cent text-gray-200" value={languageFilter} onChange={handleLanguageFilter}>
+              <option value="">Filter</option>
+              <option value="Javascript">Javascript</option>
+              <option value="Typescript">Typescript</option>
+              <option value="CSS">CSS</option>
+              <option value="HTML">HTML</option>
+        </select>
         {/* <Button className="p-0">
-          <Link className="w-full h-full p-2 text-center" to={'/repositories/new'}>Create New Repo</Link>
+          <Link className="w-full h-full p-2 text-center text-gray-200" to={'/repositories/new'}>&#x2b; New Repo</Link>
         </Button> */}
       </div>
       <Card className="flex flex-col items-center max-md:w-4/5 max-lg:w-3/5 lg:w-3/6">
@@ -192,13 +211,14 @@ const RepositoryList = () => {
             {displayedRepositories.map((repo) => (
               <li
                 key={repo.id}
-                className="leading-10 border-border border-2 rounded-sm p-1 w-full text-lg transition-all hover:bg-violet-700"
+                className=" border-border border-2 rounded-sm p-1 w-full text-lg transition-all hover:bg-violet-700"
               >
                 <Link
-                  className="block w-full h-full"
+                  className="flex flex-col items-center justify-center  w-full gap-1"
                   to={`/repositories/${repo.name}?page=${page}`}
                 >
                   {repo.name}
+                  {repo.description && <p className="text-sm w-3/4 max-sm:w-full text-gray-400 pb-2 text-balance pointer-events-none">{repo.description}</p>}
                 </Link>
               </li>
             ))}
@@ -212,7 +232,7 @@ const RepositoryList = () => {
                   className={
                     page === 1
                       ? "pointer-events-none bg-violet-500 p-2 pr-4 opacity-30 transition-all"
-                      : "bg-violet-600 p-2 pr-4 hover:bg-violet-700 transition-all cursor-pointer"
+                      : "bg-violet-700 p-2 pr-4 hover:bg-violet-800 transition-all cursor-pointer"
                   }
                   onClick={handlePrev}
                 />
@@ -225,7 +245,7 @@ const RepositoryList = () => {
                   className={
                     page === totalPages
                       ? "pointer-events-none bg-violet-500 p-2 pl-4 opacity-30 transition-all"
-                      : "bg-violet-600 p-2 pl-4 hover:bg-violet-700 transition-all cursor-pointer"
+                      : "bg-violet-700 p-2 pl-4 hover:bg-violet-800 transition-all cursor-pointer"
                   }
                   onClick={handleNext}
                 />

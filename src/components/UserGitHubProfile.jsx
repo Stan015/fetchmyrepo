@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useErrorBoundary } from "react-error-boundary";
 import {
   Card,
   CardContent,
@@ -16,14 +17,13 @@ import UserGitHubProfileSkeleton from "./skeletons/UserGitHubProfileSkeleton";
 import { Helmet } from "react-helmet-async";
 
 const UserGitHubProfile = () => {
+  const {showBoundary} = useErrorBoundary();
   const [userProfile, setUserProfile] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
       setLoading(true);
-      setError(null);
 
       try {
         const response = await fetch(`https://api.github.com/users/Stan015`, {
@@ -39,24 +39,20 @@ const UserGitHubProfile = () => {
         const data = await response.json();
         setUserProfile(data);
       } catch (error) {
-        setError(error.message);
-        console.error("Error fetching user profile:", error);
+        showBoundary(error.message);
+        // console.error("Error fetching user profile:", error);
       } finally {
         setLoading(false);
       }
     };
 
     fetchUserProfile();
-  }, []);
+  }, [showBoundary]);
 
   // console.log(userProfile);
 
   if (loading) {
     return <UserGitHubProfileSkeleton />;
-  }
-
-  if (error) {
-    throw new Error(error)
   }
 
   return (

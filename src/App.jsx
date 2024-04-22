@@ -1,10 +1,15 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import RepositoryList from "./components/RepositoryList";
 import RepositoryDetails from "./components/RepositoryDetails";
-import ErrorBoundary from "./components/ErrorBoundary";
+import { ErrorBoundary } from "react-error-boundary";
+import ErrorBoundaryUI from "./components/ErrorBoundaryUI";
 import NotFound from "./components/NotFound";
 import CreateRepository from "./components/CreateRepository";
 import UserGitHubProfile from "./components/UserGitHubProfile";
+
+const consoleErrorBoundary = (error) => {
+  console.log(`Error caught by Error Boundary: ${error}`);
+};
 
 const App = () => {
   return (
@@ -14,29 +19,34 @@ const App = () => {
           <Route
             path={"/"}
             element={
-              <>
-                <ErrorBoundary>
-                  <UserGitHubProfile />
-                  <RepositoryList />
-                </ErrorBoundary>
-              </>
+              <ErrorBoundary
+                FallbackComponent={ErrorBoundaryUI}
+                onError={consoleErrorBoundary}
+              >
+                <UserGitHubProfile />
+                <RepositoryList />
+              </ErrorBoundary>
             }
           />
           <Route
             path="/repositories/"
             element={
-              <>
-                <ErrorBoundary>
-                  <UserGitHubProfile />
-                  <RepositoryList />
-                </ErrorBoundary>
-              </>
+              <ErrorBoundary
+                FallbackComponent={ErrorBoundaryUI}
+                onError={consoleErrorBoundary}
+              >
+                <UserGitHubProfile />
+                <RepositoryList />
+              </ErrorBoundary>
             }
           />
           <Route
             path="/repositories/new"
             element={
-              <ErrorBoundary>
+              <ErrorBoundary
+                FallbackComponent={ErrorBoundaryUI}
+                onError={consoleErrorBoundary}
+              >
                 <CreateRepository />
               </ErrorBoundary>
             }
@@ -44,7 +54,10 @@ const App = () => {
           <Route
             path="/repositories/:repoName"
             element={
-              <ErrorBoundary>
+              <ErrorBoundary
+                FallbackComponent={ErrorBoundaryUI}
+                onError={consoleErrorBoundary}
+              >
                 <RepositoryDetails />
               </ErrorBoundary>
             }

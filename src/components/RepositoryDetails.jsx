@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useErrorBoundary } from "react-error-boundary";
 import { useParams, Link } from "react-router-dom";
 import {
   Card,
@@ -18,11 +19,10 @@ const RepositoryDetails = () => {
   const [repository, setRepository] = useState(null);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const {showBoundary} = useErrorBoundary();
 
   useEffect(() => {
     setLoading(true);
-    setError(null);
 
     const fetchClickedRepo = async () => {
       try {
@@ -40,7 +40,7 @@ const RepositoryDetails = () => {
         const data = await response.json();
         setRepository(data);
       } catch (error) {
-        setError(error.message);
+        showBoundary(error.message);
         console.error("Error fetching repository details:", error);
       } finally {
         setLoading(false);
@@ -48,7 +48,7 @@ const RepositoryDetails = () => {
     };
 
     fetchClickedRepo();
-  }, [repoName]);
+  }, [repoName, showBoundary]);
 
   const handleBackToPreviousPage = () => {
     navigate(-1);
@@ -57,9 +57,7 @@ const RepositoryDetails = () => {
   if (loading) {
     return <RepositoryDetailsSkeleton />;
   }
-  if (error) {
-    throw new Error(error)
-  }
+
   // console.log(repository)
 
   return (
