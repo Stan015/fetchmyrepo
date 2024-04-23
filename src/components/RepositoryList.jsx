@@ -278,13 +278,13 @@ const RepositoryList = () => {
       <footer className="flex flex-col w-full h-[11rem] items-center self-end justify-center gap-6 mt-4 border-t-[1px] border-t-slate-800 p-2">
         <div className="flex w-full gap-6 text-[0.7rem] justify-center">
           <Link
-            className="bg-violet-600 p-2 text-center hover:bg-violet-700 transition-all cursor-pointer rounded-sm w-[8rem]"
+            className="bg-violet-700 p-2 text-center hover:bg-violet-800 transition-all cursor-pointer rounded-sm w-[8rem]"
             onClick={testErrorBoundary}
           >
             Test Error Boundary
           </Link>
           <Link
-            className="bg-violet-600 p-2 text-center hover:bg-violet-700 transition-all cursor-pointer rounded-sm w-[8rem]"
+            className="bg-violet-700 p-2 text-center hover:bg-violet-800 transition-all cursor-pointer rounded-sm w-[8rem]"
             to={"/notfound"}
           >
             Test 404 page
