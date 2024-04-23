@@ -50,7 +50,7 @@ const RepositoryList = () => {
 
       try {
         const response = await fetch(
-          `https://api.github.com/users/Stan015/repos`
+          `https://api.github.com/users/Stan015/repos`,
           // {
           //   headers: {
           //     Authorization: `token ${
@@ -182,8 +182,8 @@ const RepositoryList = () => {
   );
 
   return (
-    <div className="flex flex-col w-full items-center min-h-full gap-6 pt-10">
-      <div className="flex gap-2 w-full items-center max-md:w-4/5 max-lg:w-3/5 lg:w-3/6">
+    <div className="grid grid-cols-1 w-full justify-items-center min-h-full gap-6 pt-10">
+      <div className="flex gap-2 w-full items-center h-max max-md:w-4/5 max-lg:w-3/5 lg:w-3/6">
         <Input
           type="search"
           placeholder="Search repo by name..."
@@ -205,7 +205,7 @@ const RepositoryList = () => {
           <Link className="w-full h-full p-2 text-center text-gray-200" to={'/repositories/new'}>&#x2b; New Repo</Link>
         </Button> */}
       </div>
-      <Card className="flex flex-col items-center max-md:w-4/5 max-lg:w-3/5 lg:w-3/6">
+      <Card className="flex flex-col items-center max-md:w-4/5 max-lg:w-[90%] lg:w-[90%] md:border-none">
         <CardHeader className="mb-4">
           {/* {error && <div>Error: {error}</div>} */}
           <CardTitle className="text-3xl text-center mb-2 max-sm:text-2xl uppercase">
@@ -216,24 +216,30 @@ const RepositoryList = () => {
             project details.
           </CardDescription>
         </CardHeader>
-        <CardContent className="h-full w-full">
+        <CardContent className="flex justify-center h-full w-full">
           {/* {noRepoName && <p>No Repository with this name.</p>} */}
-          <ul className="flex flex-col w-full items-center text-center gap-4 h-full">
+          <ul className="flex w-full justify-center text-center gap-4 h-full flex-wrap">
             {displayedRepositories.map((repo) => (
               <li
                 key={repo.id}
-                className=" border-border border-2 rounded-sm p-1 w-full text-lg transition-all hover:bg-violet-700"
+                // className=" border-border border-2 rounded-sm p-1 w-full text-lg transition-all hover:bg-violet-700"
+                className=" border-border border-2 w-[20rem] rounded-sm p-1 text-lg transition-all hover:border-violet-700"
               >
+              {/* <p className="text-sm w-3/4 max-sm:w-full text-gray-400 pb-2 text-balance pointer-events-none"></p> */}
                 <Link
-                  className="flex flex-col items-center justify-center  w-full gap-1"
+                  className="flex flex-col items-center justify-center gap-1"
                   to={`/repositories/${repo.name}?page=${page}`}
                 >
                   {repo.name}
                   {repo.description && (
-                    <p className="text-sm w-3/4 max-sm:w-full text-gray-400 pb-2 text-balance pointer-events-none">
+                    
+                    <p className="text-sm  text-gray-400 pb-2 px-1 text-balance pointer-events-none">
                       {repo.description}
                     </p>
                   )}
+                  <p className="text-sm  text-gray-400 pb-2 text-balance pointer-events-none">
+                    {repo.language}
+                  </p>
                 </Link>
               </li>
             ))}
@@ -269,7 +275,7 @@ const RepositoryList = () => {
           </Pagination>
         </CardFooter>
       </Card>
-      <footer className="flex flex-col w-full h-[11rem] items-center justify-center gap-6 mt-4 border-t-[1px] border-t-slate-800 p-2">
+      <footer className="flex flex-col w-full h-[11rem] items-center self-end justify-center gap-6 mt-4 border-t-[1px] border-t-slate-800 p-2">
         <div className="flex w-full gap-6 text-[0.7rem] justify-center">
           <Link
             className="bg-violet-600 p-2 text-center hover:bg-violet-700 transition-all cursor-pointer rounded-sm w-[8rem]"

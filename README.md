@@ -45,6 +45,7 @@ The project was started with Vite and all dependencies were installed with pnpm.
 #### Some screenshots
 
 ![screenshot showing user profile card, search bar, create repo btn repo list, etc](src/assets/images/create-btn.png)
+![screenshot showing user profile card, search bar, create repo btn repo list, etc](src/assets/images/desktop.png)
 ![create repo page](src//assets/images/create-repo-route.png)
 ![repo details](src/assets/images/project-details-page.png)
 ![skeleton](src/assets/images/skeleton.png)

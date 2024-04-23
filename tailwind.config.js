@@ -17,6 +17,9 @@ module.exports = {
       },
     },
     extend: {
+      // gridTemplateRows: {
+      //   '3': '2rem 1fr auto',
+      // },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
