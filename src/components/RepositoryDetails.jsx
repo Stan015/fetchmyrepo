@@ -79,15 +79,15 @@ const RepositoryDetails = () => {
             <p className="leading-10 border-border border-2 rounded-sm p-1">Forks: {repository.forks_count}</p>
             <p className="leading-10 border-border border-2 rounded-sm p-1">Open Issues: {repository.open_issues_count}</p>
             {repository.license && <p className="leading-10 border-border border-2 rounded-sm">License: {repository.license.name}</p>}
-            {repository.homepage && <Link className="leading-10 border-border border-2 rounded-sm p-1 transition-all hover:border-violet-700" to={repository.homepage} target="_blank" rel="noopener noreferrer">Visit Live Site</Link>}
-            {repository.html_url && <Link className="leading-10 border-border border-2 rounded-sm p-1 transition-all hover:border-violet-700" to={repository.html_url} target="_blank" rel="noopener noreferrer">Visit Remote Repo</Link>}
+            {repository.homepage && <Link className="leading-10 border-border border-2 rounded-sm p-1 transition-all ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 hover:border-violet-700 hover:border-violet-700" to={repository.homepage} target="_blank" rel="noopener noreferrer">Visit Live Site</Link>}
+            {repository.html_url && <Link className="leading-10 border-border border-2 rounded-sm p-1 transition-all ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 hover:border-violet-700" to={repository.html_url} target="_blank" rel="noopener noreferrer">Visit Remote Repo</Link>}
             {/* {repository.license && <p className="leading-10 border-border border-2 rounded-sm">License: {repository.license.name}</p>} */}
             <p className="leading-10 border-border border-2 rounded-sm p-1">Date Created: {new Date(repository.created_at).toLocaleDateString()}</p>
             <p className="leading-10 border-border border-2 rounded-sm p-1">Last Updated: {new Date(repository.updated_at).toLocaleDateString()}</p>
           </CardContent>
 
           <CardFooter className="">
-            <Button className="bg-violet-700 p-2 rounded-md hover:bg-violet-800 transition-all" onClick={handleBackToPreviousPage}>
+            <Button className="bg-primary hover:bg-violet-800 p-2 rounded-md hover:bg-violet-800transition-all ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 hover:border-violet-700" onClick={handleBackToPreviousPage}>
               Back to Repository List
             </Button>
           </CardFooter>

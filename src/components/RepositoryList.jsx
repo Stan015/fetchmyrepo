@@ -19,7 +19,6 @@ import {
 } from "@/components/ui/card";
 import { Input } from "./ui/input";
 import RepositoryListSkeleton from "./skeletons/RepositoryListSkeleton";
-// import { Button } from "./ui/button";
 
 const RepositoryList = () => {
   const { showBoundary } = useErrorBoundary();
@@ -191,9 +190,10 @@ const RepositoryList = () => {
           onChange={handleSearchChange}
         />
         <select
-          className="w-[5rem] h-[2.35rem] outline-none border-[1px] transition-all border-violet-700 px-1 text-sm rounded-sm bg-violet-700 hover:bg-violet-800 text-cent text-gray-200"
+          className="w-[5rem] h-[2.35rem] ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border-[1px] transition-all border-border px-1 text-sm rounded-sm bg-primary hover:bg-violet-800 text-cent text-gray-200"
           value={languageFilter}
           onChange={handleLanguageFilter}
+          tabIndex="0"
         >
           <option value="">Filter</option>
           <option value="Javascript">Javascript</option>
@@ -201,9 +201,7 @@ const RepositoryList = () => {
           <option value="CSS">CSS</option>
           <option value="HTML">HTML</option>
         </select>
-        {/* <Button className="p-0">
-          <Link className="w-full h-full p-2 text-center text-gray-200" to={'/repositories/new'}>&#x2b; New Repo</Link>
-        </Button> */}
+        {/* <Link className="w-[8.3rem] leading-[2.3rem] whitespace-nowrap text-center ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border-[1px] transition-all border-border px-1 text-sm rounded-sm bg-primary hover:bg-violet-800 text-gray-200" to={'/repositories/new'}>&#x2b; New Repo</Link> */}
       </div>
       <Card className="flex flex-col items-center max-md:w-4/5 max-lg:w-[90%] lg:w-[90%] md:border-none">
         <CardHeader className="mb-4">
@@ -223,11 +221,11 @@ const RepositoryList = () => {
               <li
                 key={repo.id}
                 // className=" border-border border-2 rounded-sm p-1 w-full text-lg transition-all hover:bg-violet-700"
-                className=" border-border border-2 w-[20rem] rounded-sm p-1 text-lg transition-all hover:border-violet-700"
+                className=" w-[20rem] p-1 text-lg"
               >
               {/* <p className="text-sm w-3/4 max-sm:w-full text-gray-400 pb-2 text-balance pointer-events-none"></p> */}
                 <Link
-                  className="flex flex-col items-center justify-center gap-1"
+                  className="flex flex-col items-center justify-center gap-1 h-full border-border border-2 rounded-sm transition-all ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 hover:border-violet-700"
                   to={`/repositories/${repo.name}?page=${page}`}
                 >
                   {repo.name}
@@ -252,22 +250,26 @@ const RepositoryList = () => {
                 <PaginationPrevious
                   className={
                     page === 1
-                      ? "pointer-events-none bg-violet-500 p-2 pr-4 opacity-30 transition-all"
-                      : "bg-violet-700 p-2 pr-4 hover:bg-violet-800 transition-all cursor-pointer"
+                      ? "pointer-events-none bg-primary p-2 pr-4 opacity-30 transition-all"
+                      : "bg-primary p-2 pr-4 hover:bg-violet-800 transition-all cursor-pointer"
                   }
+                  role="button"
+                  tabIndex="0"
                   onClick={handlePrev}
                 />
               </PaginationItem>
               <PaginationItem>
-                <PaginationLink>{page}</PaginationLink>
+                <PaginationLink aria-current="page">{page}</PaginationLink>
               </PaginationItem>
               <PaginationItem>
                 <PaginationNext
                   className={
                     page === totalPages
-                      ? "pointer-events-none bg-violet-500 p-2 pl-4 opacity-30 transition-all"
-                      : "bg-violet-700 p-2 pl-4 hover:bg-violet-800 transition-all cursor-pointer"
+                      ? "pointer-events-none bg-primary p-2 pl-4 opacity-30 transition-all"
+                      : "bg-primary p-2 pl-4 hover:bg-violet-800 transition-all cursor-pointer"
                   }
+                  role="button"
+                  tabIndex="0"
                   onClick={handleNext}
                 />
               </PaginationItem>
@@ -278,13 +280,13 @@ const RepositoryList = () => {
       <footer className="flex flex-col w-full h-[11rem] items-center self-end justify-center gap-6 mt-4 border-t-[1px] border-t-slate-800 p-2">
         <div className="flex w-full gap-6 text-[0.7rem] justify-center">
           <Link
-            className="bg-violet-700 p-2 text-center hover:bg-violet-800 transition-all cursor-pointer rounded-sm w-[8rem]"
+            className="bg-primary p-2 text-center hover:bg-violet-800 transition-all ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 hover:border-violet-700 cursor-pointer rounded-sm w-[8rem]"
             onClick={testErrorBoundary}
           >
             Test Error Boundary
           </Link>
           <Link
-            className="bg-violet-700 p-2 text-center hover:bg-violet-800 transition-all cursor-pointer rounded-sm w-[8rem]"
+            className="bg-primary p-2 text-center hover:bg-violet-800transition-all ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 hover:border-violet-700 cursor-pointer rounded-sm w-[8rem]"
             to={"/notfound"}
           >
             Test 404 page

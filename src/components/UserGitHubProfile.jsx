@@ -34,7 +34,7 @@ const UserGitHubProfile = () => {
         //     }`,
         //   },
         // }
-        );
+      );
         if (!response.ok) {
           throw new Error("Failed to fetch user profile");
         }
@@ -92,10 +92,11 @@ const UserGitHubProfile = () => {
         </CardContent>
         <CardFooter className="flex w-full gap-4 items-center justify-center text-center">
           <p
-            className="transition-all hover:text-violet-600"
+            className="transition-all ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1  rounded-sm hover:bg-violet-800"
             onClick={() => {
               window.location.href = `mailto:${userProfile.email}`;
             }}
+            tabIndex="0"
           >
             <MdEmail size={30} />
           </p>
@@ -103,7 +104,7 @@ const UserGitHubProfile = () => {
             to="https://twitter.com/StanleyAzi"
             target="_blank"
             rel="noopener noreferrer"
-            className="transition-all hover:text-violet-600"
+            className="transition-all ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm hover:bg-violet-800 p-1"
           >
             <BsTwitterX size={20} />
           </Link>
@@ -111,7 +112,7 @@ const UserGitHubProfile = () => {
             to="https://www.linkedin.com/in/stanley-azi-475044217/"
             target="_blank"
             rel="noopener noreferrer"
-            className="transition-all hover:text-violet-600"
+            className="transition-all ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2  rounded-sm hover:bg-violet-800 p-[1px]"
           >
             <FaLinkedinIn size={25} />
           </Link>
