@@ -198,6 +198,7 @@ const RepositoryList = () => {
           <option value="">Filter</option>
           <option value="Javascript">Javascript</option>
           <option value="Typescript">Typescript</option>
+          <option value="Vue">Vue</option>
           <option value="CSS">CSS</option>
           <option value="HTML">HTML</option>
         </select>
