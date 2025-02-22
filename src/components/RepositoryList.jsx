@@ -49,7 +49,7 @@ const RepositoryList = () => {
 
       try {
         const response = await fetch(
-          `https://api.github.com/users/Stan015/repos`,
+          `https://api.github.com/users/Stan015/repos`
           // {
           //   headers: {
           //     Authorization: `token ${
@@ -62,7 +62,11 @@ const RepositoryList = () => {
           throw new Error("Failed to fetch repositories");
         }
         const data = await response.json();
-        setRepositories(data);
+        const sortedData = data.sort(
+          (a, b) => new Date(b.created_at) - new Date(a.created_at)
+        );
+
+        setRepositories(sortedData);
 
         setTotalPages(Math.ceil(data.length / reposPerPage));
       } catch (error) {
@@ -198,6 +202,7 @@ const RepositoryList = () => {
           <option value="">Filter</option>
           <option value="Javascript">Javascript</option>
           <option value="Typescript">Typescript</option>
+          <option value="Java">Java</option>
           <option value="Vue">Vue</option>
           <option value="CSS">CSS</option>
           <option value="HTML">HTML</option>
@@ -224,14 +229,13 @@ const RepositoryList = () => {
                 // className=" border-border border-2 rounded-sm p-1 w-full text-lg transition-all hover:bg-violet-700"
                 className=" w-[20rem] p-1 text-lg"
               >
-              {/* <p className="text-sm w-3/4 max-sm:w-full text-gray-400 pb-2 text-balance pointer-events-none"></p> */}
+                {/* <p className="text-sm w-3/4 max-sm:w-full text-gray-400 pb-2 text-balance pointer-events-none"></p> */}
                 <Link
                   className="flex flex-col items-center justify-center gap-1 h-full border-border border-2 rounded-sm transition-all ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 hover:border-violet-700"
                   to={`/repositories/${repo.name}?page=${page}`}
                 >
                   {repo.name}
                   {repo.description && (
-                    
                     <p className="text-sm  text-gray-400 pb-2 px-1 text-balance pointer-events-none">
                       {repo.description}
                     </p>

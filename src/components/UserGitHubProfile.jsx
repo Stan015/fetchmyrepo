@@ -109,7 +109,7 @@ const UserGitHubProfile = () => {
             <BsTwitterX size={20} />
           </Link>
           <Link
-            to="https://www.linkedin.com/in/stanley-azi-475044217/"
+            to="https://www.linkedin.com/in/stanleyazi/"
             target="_blank"
             rel="noopener noreferrer"
             className="transition-all ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2  rounded-sm hover:bg-violet-800 p-[1px]"
